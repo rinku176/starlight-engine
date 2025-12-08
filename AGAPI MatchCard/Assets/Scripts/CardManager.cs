@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {
+
     public static CardManager Instance;
 
     public GameObject cardPrefab;
@@ -11,9 +13,23 @@ public class CardManager : MonoBehaviour
 
     public Sprite[] emojiSprites;
 
+    public TextMeshProUGUI movesText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI timerText;
+
+    private int moves = 0;
+    private int score = 0;
+    private int totalPairs = 8; //for 4x4 grid
+    private float timer = 0f;
+    private bool isTimerRunning = true;
+
     private Card firstCard = null;
     private Card secondCard = null;
     private bool canClick = true;
+
+    public GameObject winPanel;
+    public TextMeshProUGUI summaryText;
+
 
     void Awake()
     {
@@ -23,6 +39,15 @@ public class CardManager : MonoBehaviour
     void Start()
     {
         CreateGrid(4, 4);
+    }
+
+    void Update()
+    {
+        if (isTimerRunning)
+        {
+            timer += Time.deltaTime;
+            timerText.text = "Time: " + Mathf.FloorToInt(timer) + "secs";
+        }
     }
 
     void CreateGrid(int rows, int cols)
@@ -78,11 +103,16 @@ public class CardManager : MonoBehaviour
 
     IEnumerator ResolveCards()
     {
-       
+        moves++;
+        movesText.text = "Moves: " + moves;
+
         yield return new WaitForSeconds(0.5f);
 
         if (firstCard.cardID == secondCard.cardID)
         {
+            score++;
+            scoreText.text = "Score: " + score;
+
             firstCard.SetMatched();
             secondCard.SetMatched();
 
@@ -99,5 +129,34 @@ public class CardManager : MonoBehaviour
         firstCard = null;
         secondCard = null;
         canClick = true;
+
+        if (score == totalPairs)
+        {
+            EndGame();
+        }
+
     }
+
+
+    void EndGame()
+    {
+        isTimerRunning = false;
+        winPanel.SetActive(true);
+
+        string summary = "";
+        summary += "YOU WIN!\n\n";
+        summary += "Moves: " + moves + "\n";
+        summary += "Score: " + score;
+        summary += "Time: " + Mathf.FloorToInt(timer) + "seconds";
+
+        summaryText.text = summary;
+    }
+
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
+        );
+    }
+
 }

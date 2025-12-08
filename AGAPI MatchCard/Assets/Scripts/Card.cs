@@ -87,11 +87,10 @@ public class Card : MonoBehaviour
         frontImage.gameObject.SetActive(false);
         backImage.gameObject.SetActive(false);
 
-        // Optional: make card transparent (still takes space in grid)
+        // Make card transparent
         var img = GetComponent<Image>();
         if (img != null)
             img.enabled = false;
 
-        // Card remains in grid, but invisible and unclickable
     }
 }

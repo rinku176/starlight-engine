@@ -85,6 +85,10 @@ public class CardManager : MonoBehaviour
         {
             firstCard.SetMatched();
             secondCard.SetMatched();
+
+            firstCard.RemoveCard();
+            secondCard.RemoveCard();
+
         }
         else
         {

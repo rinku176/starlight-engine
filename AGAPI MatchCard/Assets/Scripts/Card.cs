@@ -75,4 +75,23 @@ public class Card : MonoBehaviour
             btn.interactable = false;
         }
     }
+
+    public void RemoveCard()
+    {
+        // Disable button so the player can't click it anymore
+        var btn = GetComponent<Button>();
+        if (btn != null)
+            btn.interactable = false;
+
+        // Hide the front and back images
+        frontImage.gameObject.SetActive(false);
+        backImage.gameObject.SetActive(false);
+
+        // Optional: make card transparent (still takes space in grid)
+        var img = GetComponent<Image>();
+        if (img != null)
+            img.enabled = false;
+
+        // Card remains in grid, but invisible and unclickable
+    }
 }

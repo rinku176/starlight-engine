@@ -19,6 +19,7 @@ public class Card : MonoBehaviour
 
     public void OnCardClicked()
     {
+
         if (isFlipped) return;  
 
         isFlipped = true;
@@ -26,11 +27,13 @@ public class Card : MonoBehaviour
         animator.SetTrigger("Flip");
 
         Invoke("ShowFront", 0.15f);
+
+        CardManager.Instance.CardRevealed(this);
     }
 
     void ShowFront()
     {
-        Debug.Log("flip");
+        
         backImage.gameObject.SetActive(false);
         frontImage.gameObject.SetActive(true);
     }

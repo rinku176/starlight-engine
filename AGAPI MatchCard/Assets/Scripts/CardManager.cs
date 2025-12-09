@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
@@ -23,7 +24,7 @@ public class CardManager : MonoBehaviour
 
     private int moves = 0;
     private int score = 0;
-    private int totalPairs = 8; //for 4x4 grid
+    private int totalPairs = 8; // for 4x4 grid
     private float timer = 0f;
     private bool isTimerRunning = true;
 
@@ -42,9 +43,14 @@ public class CardManager : MonoBehaviour
 
     void Start()
     {
-        CreateGrid(4, 4);
+        int rows = 4;
+        int cols = 4;
+
+        CreateGrid(rows, cols);
+        AdjustCardSizes(rows, cols);
+
         isTimerRunning = false;
-        StartCoroutine(StartGamePreview()); 
+        StartCoroutine(StartGamePreview());
         audioSource = GetComponent<AudioSource>();
 
     }
@@ -54,7 +60,7 @@ public class CardManager : MonoBehaviour
         if (isTimerRunning)
         {
             timer += Time.deltaTime;
-            timerText.text = "Time: " + Mathf.FloorToInt(timer) + "secs";
+            timerText.text = "Time: " + Mathf.FloorToInt(timer) + " secs";
         }
     }
 
@@ -88,6 +94,32 @@ public class CardManager : MonoBehaviour
             cardComponent.frontImage.sprite = emojiSprites[ids[i] - 1];
 
         }
+    }
+
+    void AdjustCardSizes(int rows, int cols)
+    {
+        GridLayoutGroup grid = gridParent.GetComponent<GridLayoutGroup>();
+        RectTransform rt = gridParent.GetComponent<RectTransform>();
+
+        
+        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = cols;
+
+        float spacingX = grid.spacing.x;
+        float spacingY = grid.spacing.y;
+
+        // width and height inside CardArea
+        float totalWidth = rt.rect.width - spacingX * (cols - 1);
+        float totalHeight = rt.rect.height - spacingY * (rows - 1);
+
+        // size  per cell
+        float cellWidth = totalWidth / cols;
+        float cellHeight = totalHeight / rows;
+
+        // keep cards square
+        float finalSize = Mathf.Min(cellWidth, cellHeight);
+
+        grid.cellSize = new Vector2(finalSize, finalSize);
     }
 
     public void CardRevealed(Card card)

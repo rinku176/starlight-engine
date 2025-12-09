@@ -17,6 +17,10 @@ public class CardManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timerText;
 
+    public AudioClip correctSound;
+    public AudioClip wrongSound;
+    private AudioSource audioSource;
+
     private int moves = 0;
     private int score = 0;
     private int totalPairs = 8; //for 4x4 grid
@@ -40,7 +44,9 @@ public class CardManager : MonoBehaviour
     {
         CreateGrid(4, 4);
         isTimerRunning = false;
-        StartCoroutine(StartGamePreview());
+        StartCoroutine(StartGamePreview()); 
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     void Update()
@@ -115,6 +121,9 @@ public class CardManager : MonoBehaviour
             score++;
             scoreText.text = "Score: " + score;
 
+            if (correctSound != null)
+                audioSource.PlayOneShot(correctSound);
+
             firstCard.SetMatched();
             secondCard.SetMatched();
 
@@ -124,6 +133,9 @@ public class CardManager : MonoBehaviour
         }
         else
         {
+            if (wrongSound != null)
+                audioSource.PlayOneShot(wrongSound);
+
             firstCard.FlipBack();
             secondCard.FlipBack();
         }
@@ -139,6 +151,11 @@ public class CardManager : MonoBehaviour
 
     }
 
+    public bool IsPlayingFeedbackSound()
+    {
+        return audioSource.isPlaying;
+    }
+
     IEnumerator StartGamePreview()
     {
         // Disable clicking during preview
@@ -151,10 +168,7 @@ public class CardManager : MonoBehaviour
             Card card = child.GetComponent<Card>();
             if (card != null)
             {
-                
                 card.ShowFrontInstant();
-                Debug.Log("Front Sprite: " + card.frontImage.sprite);
-
             }
         }
 

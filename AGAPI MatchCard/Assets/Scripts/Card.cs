@@ -41,7 +41,7 @@ public class Card : MonoBehaviour
         if (isFlipped) return;
         if (CardManager.Instance == null) return;
 
-        if (flipSound != null)
+        if (flipSound != null && !CardManager.Instance.IsPlayingFeedbackSound())
             audioSource.PlayOneShot(flipSound);
 
         animator.Play("CardFlip", 0, 0f);

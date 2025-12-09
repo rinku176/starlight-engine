@@ -667,7 +667,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1032681220
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1183,6 +1183,8 @@ MonoBehaviour:
   movesText: {fileID: 341145604}
   scoreText: {fileID: 1505284728}
   timerText: {fileID: 504858443}
+  correctSound: {fileID: 8300000, guid: 00fdf067b8250134999dacfec9b450d1, type: 3}
+  wrongSound: {fileID: 8300000, guid: 05aaafccd0fce734ca9345f6f00a4610, type: 3}
   winPanel: {fileID: 1032681219}
   summaryText: {fileID: 1065037246}
 --- !u!4 &1536551117

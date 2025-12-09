@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -84,6 +85,47 @@ public class Card : MonoBehaviour
     }
 
     public bool IsMatched() => isMatched;
+
+    public IEnumerator MatchAnimation()
+    {
+        // save original values
+        Vector3 originalScale = transform.localScale;
+        Vector3 bigScale = originalScale * 1.2f;
+        Vector3 smallScale = originalScale * 0.8f;
+
+        Image cardBG = GetComponent<Image>();
+        Color startColor = cardBG.color;
+
+        float t = 0f;
+
+        // scale up
+        while (t < 0.15f)
+        {
+            t += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(originalScale, bigScale, t / 0.15f);
+            yield return null;
+        }
+
+        // Reset timer
+        t = 0f;
+
+        // scale down + fadeout
+        while (t < 0.15f)
+        {
+            t += Time.deltaTime;
+
+            transform.localScale = Vector3.Lerp(bigScale, smallScale, t / 0.15f);
+
+            Color fade = startColor;
+            fade.a = Mathf.Lerp(1f, 0f, t / 0.15f);
+            cardBG.color = fade;
+
+            yield return null;
+        }
+
+        RemoveCard();
+    }
+
 
     // Hide card for matched pairs
     public void RemoveCard()

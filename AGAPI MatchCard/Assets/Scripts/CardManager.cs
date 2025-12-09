@@ -193,8 +193,9 @@ public class CardManager : MonoBehaviour
                 c1.SetMatched();
                 c2.SetMatched();
 
-                c1.RemoveCard();
-                c2.RemoveCard();
+                StartCoroutine(c1.MatchAnimation());
+                StartCoroutine(c2.MatchAnimation());
+
             }
 
             else

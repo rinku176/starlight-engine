@@ -22,14 +22,16 @@ public class CardManager : MonoBehaviour
     public AudioClip wrongSound;
     private AudioSource audioSource;
 
+    public static int rows = 4;
+    public static int cols = 4;
+
     private int moves = 0;
     private int score = 0;
-    private int totalPairs = 8; // for 4x4 grid
+    private int totalPairs = 10; // for 4x4 grid
     private float timer = 0f;
     private bool isTimerRunning = true;
 
-    private Card firstCard = null;
-    private Card secondCard = null;
+    
     private bool isEvaluating = false;
     private List<Card> revealedCards = new List<Card>();
 
@@ -45,16 +47,8 @@ public class CardManager : MonoBehaviour
 
     void Start()
     {
-        int rows = 4;
-        int cols = 4;
-
-        CreateGrid(rows, cols);
-        AdjustCardSizes(rows, cols);
-
         isTimerRunning = false;
-        StartCoroutine(StartGamePreview());
         audioSource = GetComponent<AudioSource>();
-
     }
 
     void Update()
@@ -64,6 +58,13 @@ public class CardManager : MonoBehaviour
             timer += Time.deltaTime;
             timerText.text = "Time: " + Mathf.FloorToInt(timer) + " secs";
         }
+    }
+
+    public void BeginGame()
+    {
+        CreateGrid(rows, cols);
+        AdjustCardSizes(rows, cols);
+        StartCoroutine(StartGamePreview());
     }
 
     void CreateGrid(int rows, int cols)

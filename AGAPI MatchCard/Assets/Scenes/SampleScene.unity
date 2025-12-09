@@ -1992,6 +1992,7 @@ MonoBehaviour:
   timerText: {fileID: 504858443}
   correctSound: {fileID: 8300000, guid: 00fdf067b8250134999dacfec9b450d1, type: 3}
   wrongSound: {fileID: 8300000, guid: 05aaafccd0fce734ca9345f6f00a4610, type: 3}
+  endScreenAudio: {fileID: 1536551118}
   winPanel: {fileID: 1032681219}
   summaryText: {fileID: 1065037246}
 --- !u!4 &1536551117
@@ -2019,7 +2020,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 27a8a61586f11024d8e53f30daebe041, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.8
   m_Pitch: 1

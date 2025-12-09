@@ -8,6 +8,7 @@ public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
 
+    // to add grid and card Prefabs
     public GameObject cardPrefab;
     public Transform gridParent;
 
@@ -15,15 +16,23 @@ public class CardManager : MonoBehaviour
 
     public Sprite[] emojiSprites;
 
+    // UI texts to show score, moves and timer
     public TextMeshProUGUI movesText;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timerText;
 
+    // to check for speed bonus score
+    private float lastMatchTime = 0f;
+    public float fastThreshold = 1.0f;   
+    public float mediumThreshold = 3.0f; 
+
+    // to add audio clips 
     public AudioClip correctSound;
     public AudioClip wrongSound;
     public AudioSource endScreenAudio;
     private AudioSource audioSource;
 
+    //no of rows and columns
     public static int rows = 4;
     public static int cols = 4;
 
@@ -37,7 +46,7 @@ public class CardManager : MonoBehaviour
     private bool isEvaluating = false;
     private List<Card> revealedCards = new List<Card>();
 
-
+    // UI for end screen
     public GameObject winPanel;
     public TextMeshProUGUI summaryText;
 
@@ -108,7 +117,6 @@ public class CardManager : MonoBehaviour
         GridLayoutGroup grid = gridParent.GetComponent<GridLayoutGroup>();
         RectTransform rt = gridParent.GetComponent<RectTransform>();
 
-        
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         grid.constraintCount = cols;
 
@@ -135,14 +143,14 @@ public class CardManager : MonoBehaviour
         if (revealedCards.Contains(card)) return;
 
         revealedCards.Add(card);
+        if (revealedCards.Count == 1)
+        {
+            lastMatchTime = Time.time;
+        }
 
-        // Only evaluate when at least 2 cards are face-up
         if (!isEvaluating)
             StartCoroutine(EvaluateCards());
     }
-
-
-
 
     IEnumerator EvaluateCards()
     {
@@ -164,15 +172,31 @@ public class CardManager : MonoBehaviour
                 if (correctSound != null)
                     audioSource.PlayOneShot(correctSound);
 
-                score++;
-                scoreText.text = "Score: " + score;
+                // Calculate how fast the match was made
+                float timeTaken = Time.time - lastMatchTime;
 
+                int multiplier = 1;
+
+                if (timeTaken <= fastThreshold)
+                    multiplier = 3;        // Super fast match
+                else if (timeTaken <= mediumThreshold)
+                    multiplier = 2;        // fast match
+                else
+                    multiplier = 1;        // Normal speed matches
+
+                int pointsToAdd = 1 * multiplier;
+                score += pointsToAdd;
+
+                scoreText.text = "Score: " + score + " (+" + pointsToAdd + ")";
+
+                // Mark cards as matched
                 c1.SetMatched();
                 c2.SetMatched();
 
                 c1.RemoveCard();
                 c2.RemoveCard();
             }
+
             else
             {
                 if (wrongSound != null)
@@ -203,7 +227,7 @@ public class CardManager : MonoBehaviour
 
     IEnumerator StartGamePreview()
     {
-        // Disable clicking during preview
+        
         isTimerRunning = false;
 
         //Show all cards front instantly
@@ -216,7 +240,6 @@ public class CardManager : MonoBehaviour
             }
         }
 
-        
         yield return new WaitForSeconds(1f);
 
         //Hide all cards instantly

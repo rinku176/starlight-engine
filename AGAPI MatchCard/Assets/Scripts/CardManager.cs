@@ -185,8 +185,8 @@ public class CardManager : MonoBehaviour
         string summary = "";
         summary += "YOU WIN!\n\n";
         summary += "Moves: " + moves + "\n";
-        summary += "Score: " + score;
-        summary += "Time: " + Mathf.FloorToInt(timer) + "seconds";
+        summary += "Score: " + score+ "\n";
+        summary += "Time: " + Mathf.FloorToInt(timer) + " seconds";
 
         summaryText.text = summary;
     }

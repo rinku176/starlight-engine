@@ -8,13 +8,17 @@ public class Card : MonoBehaviour
     public Image backImage;
     public int cardID;
 
+    public AudioClip flipSound;
+    
+    private AudioSource audioSource;
+
     private bool isFlipped = false;
     private bool isMatched = false;
 
     void Start()
     {
-        
         animator.Play("Idle", 0, 0f);
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void ShowFrontInstant()
@@ -35,9 +39,12 @@ public class Card : MonoBehaviour
     {
         if (isMatched) return;
         if (isFlipped) return;
+        if (CardManager.Instance == null) return;
+
+        if (flipSound != null)
+            audioSource.PlayOneShot(flipSound);
 
         animator.Play("CardFlip", 0, 0f);
-
         Invoke(nameof(ShowFront), 0.15f);
 
         CardManager.Instance.CardRevealed(this);
@@ -54,6 +61,8 @@ public class Card : MonoBehaviour
     public void FlipBack()
     {
         if (!isFlipped || isMatched) return;
+
+        
 
         animator.Play("CardFlip", 0, 0f);
         Invoke(nameof(ShowBack), 0.15f);

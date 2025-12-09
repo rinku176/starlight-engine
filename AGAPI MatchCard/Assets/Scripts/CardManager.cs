@@ -6,7 +6,6 @@ using TMPro;
 
 public class CardManager : MonoBehaviour
 {
-
     public static CardManager Instance;
 
     public GameObject cardPrefab;
@@ -22,6 +21,7 @@ public class CardManager : MonoBehaviour
 
     public AudioClip correctSound;
     public AudioClip wrongSound;
+    public AudioSource endScreenAudio;
     private AudioSource audioSource;
 
     public static int rows = 4;
@@ -236,6 +236,8 @@ public class CardManager : MonoBehaviour
 
     void EndGame()
     {
+        endScreenAudio.Play();
+
         isTimerRunning = false;
         winPanel.SetActive(true);
 

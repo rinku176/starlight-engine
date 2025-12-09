@@ -9,7 +9,6 @@ public class MenuManager : MonoBehaviour
     {
         CardManager.rows = 2;
         CardManager.cols = 2;
-        Debug.Log("start Easy");
         StartGame();
     }
 

@@ -27,7 +27,7 @@ public class CardManager : MonoBehaviour
 
     private int moves = 0;
     private int score = 0;
-    private int totalPairs = 10; // for 4x4 grid
+    private int totalPairs; 
     private float timer = 0f;
     private bool isTimerRunning = true;
 
@@ -62,6 +62,8 @@ public class CardManager : MonoBehaviour
 
     public void BeginGame()
     {
+        totalPairs = (rows * cols) / 2;
+
         CreateGrid(rows, cols);
         AdjustCardSizes(rows, cols);
         StartCoroutine(StartGamePreview());

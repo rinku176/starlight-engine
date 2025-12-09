@@ -38,6 +38,7 @@ public class CardManager : MonoBehaviour
 
     private int moves = 0;
     private int score = 0;
+    private int matchesFound = 0;
     private int totalPairs; 
     private float timer = 0f;
     private bool isTimerRunning = true;
@@ -172,11 +173,13 @@ public class CardManager : MonoBehaviour
                 if (correctSound != null)
                     audioSource.PlayOneShot(correctSound);
 
+                // count matched pairs
+                matchesFound++;
+
                 // Calculate how fast the match was made
                 float timeTaken = Time.time - lastMatchTime;
 
                 int multiplier = 1;
-
                 if (timeTaken <= fastThreshold)
                     multiplier = 3;        // Super fast match
                 else if (timeTaken <= mediumThreshold)
@@ -195,9 +198,7 @@ public class CardManager : MonoBehaviour
 
                 StartCoroutine(c1.MatchAnimation());
                 StartCoroutine(c2.MatchAnimation());
-
             }
-
             else
             {
                 if (wrongSound != null)
@@ -216,7 +217,7 @@ public class CardManager : MonoBehaviour
 
         isEvaluating = false;
 
-        if (score == totalPairs)
+        if (matchesFound == totalPairs)
             EndGame();
     }
 

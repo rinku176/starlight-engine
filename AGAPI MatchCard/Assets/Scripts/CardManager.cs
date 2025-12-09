@@ -141,39 +141,41 @@ public class CardManager : MonoBehaviour
 
     IEnumerator StartGamePreview()
     {
-        // Disable input during preview
+        // Disable clicking during preview
         canClick = false;
+        isTimerRunning = false;
 
-        Debug.Log ("First Card");
-        //Flip all cards face-up
+        //Show all cards front instantly
         foreach (Transform child in gridParent)
         {
             Card card = child.GetComponent<Card>();
             if (card != null)
             {
+                
                 card.ShowFrontInstant();
+                Debug.Log("Front Sprite: " + card.frontImage.sprite);
+
             }
         }
 
         
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
-        //Flip all cards face-down
+        //Hide all cards instantly
         foreach (Transform child in gridParent)
         {
             Card card = child.GetComponent<Card>();
-            if (card != null && !card.IsMatched())
+            if (card != null)
             {
-                card.ShowBackInstant(); 
+                card.ShowBackInstant();
             }
         }
 
-        
+        // Enable clicking and start timer
         isTimerRunning = true;
-
-        
         canClick = true;
     }
+
 
     void EndGame()
     {

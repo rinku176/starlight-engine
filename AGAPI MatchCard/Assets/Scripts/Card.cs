@@ -13,7 +13,7 @@ public class Card : MonoBehaviour
 
     void Start()
     {
-        ShowBackInstant();
+        
         animator.Play("Idle", 0, 0f);
     }
 

@@ -30,7 +30,9 @@ public class CardManager : MonoBehaviour
 
     private Card firstCard = null;
     private Card secondCard = null;
-    private bool canClick = true;
+    private bool isEvaluating = false;
+    private List<Card> revealedCards = new List<Card>();
+
 
     public GameObject winPanel;
     public TextMeshProUGUI summaryText;
@@ -124,64 +126,70 @@ public class CardManager : MonoBehaviour
 
     public void CardRevealed(Card card)
     {
-        if (!canClick) return;
+        if (card.IsMatched()) return;
+        if (revealedCards.Contains(card)) return;
 
-        if (firstCard == null)
-        {
-            
-            firstCard = card;
-        }
-        else if (secondCard == null && card != firstCard)
-        {
-            
-            secondCard = card;
-            canClick = false; 
+        revealedCards.Add(card);
 
-            StartCoroutine(ResolveCards());
-        }
+        // Only evaluate when at least 2 cards are face-up
+        if (!isEvaluating)
+            StartCoroutine(EvaluateCards());
     }
 
-    IEnumerator ResolveCards()
+
+
+
+    IEnumerator EvaluateCards()
     {
-        moves++;
-        movesText.text = "Moves: " + moves;
+        isEvaluating = true;
 
-        yield return new WaitForSeconds(0.5f);
-
-        if (firstCard.cardID == secondCard.cardID)
+        while (revealedCards.Count >= 2)
         {
-            score++;
-            scoreText.text = "Score: " + score;
+            Card c1 = revealedCards[0];
+            Card c2 = revealedCards[1];
 
-            if (correctSound != null)
-                audioSource.PlayOneShot(correctSound);
 
-            firstCard.SetMatched();
-            secondCard.SetMatched();
+            moves++;
+            movesText.text = "Moves: " + moves;
 
-            firstCard.RemoveCard();
-            secondCard.RemoveCard();
+            yield return new WaitForSeconds(0.5f);
 
+            if (c1.cardID == c2.cardID)
+            {
+                if (correctSound != null)
+                    audioSource.PlayOneShot(correctSound);
+
+                score++;
+                scoreText.text = "Score: " + score;
+
+                c1.SetMatched();
+                c2.SetMatched();
+
+                c1.RemoveCard();
+                c2.RemoveCard();
+            }
+            else
+            {
+                if (wrongSound != null)
+                    audioSource.PlayOneShot(wrongSound);
+
+                c1.FlipBack();
+                c2.FlipBack();
+            }
+
+
+            revealedCards.RemoveAt(0);
+            revealedCards.RemoveAt(0);
+            yield return null;
+        
         }
-        else
-        {
-            if (wrongSound != null)
-                audioSource.PlayOneShot(wrongSound);
 
-            firstCard.FlipBack();
-            secondCard.FlipBack();
-        }
-
-        firstCard = null;
-        secondCard = null;
-        canClick = true;
+        isEvaluating = false;
 
         if (score == totalPairs)
-        {
             EndGame();
-        }
-
     }
+
 
     public bool IsPlayingFeedbackSound()
     {
@@ -191,7 +199,6 @@ public class CardManager : MonoBehaviour
     IEnumerator StartGamePreview()
     {
         // Disable clicking during preview
-        canClick = false;
         isTimerRunning = false;
 
         //Show all cards front instantly
@@ -219,7 +226,6 @@ public class CardManager : MonoBehaviour
 
         // Enable clicking and start timer
         isTimerRunning = true;
-        canClick = true;
     }
 
 

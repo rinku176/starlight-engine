@@ -13,7 +13,50 @@ public class Card : MonoBehaviour
 
     void Start()
     {
-        ShowBack(); 
+        ShowBackInstant();
+        animator.Play("Idle", 0, 0f);
+    }
+
+    public void ShowFrontInstant()
+    {
+        frontImage.gameObject.SetActive(true);
+        backImage.gameObject.SetActive(false);
+        isFlipped = true;
+    }
+
+    public void ShowBackInstant()
+    {
+        backImage.gameObject.SetActive(true);
+        frontImage.gameObject.SetActive(false);
+        isFlipped = false;
+    }
+
+    public void OnCardClicked()
+    {
+        if (isMatched) return;
+        if (isFlipped) return;
+
+        animator.Play("CardFlip", 0, 0f);
+
+        Invoke(nameof(ShowFront), 0.15f);
+
+        CardManager.Instance.CardRevealed(this);
+    }
+
+    void ShowFront()
+    {
+        frontImage.gameObject.SetActive(true);
+        backImage.gameObject.SetActive(false);
+        isFlipped = true;
+    }
+
+    // Called when mismatch happens
+    public void FlipBack()
+    {
+        if (!isFlipped || isMatched) return;
+
+        animator.Play("CardFlip", 0, 0f);
+        Invoke(nameof(ShowBack), 0.15f);
     }
 
     void ShowBack()
@@ -23,74 +66,26 @@ public class Card : MonoBehaviour
         isFlipped = false;
     }
 
-    void ShowFront()
-    {
-        backImage.gameObject.SetActive(false);
-        frontImage.gameObject.SetActive(true);
-        isFlipped = true;
-    }
-
-    public void OnCardClicked()
-    {
-        // ignore clicks if this card is already matched or face up
-        if (isMatched) return;
-        if (isFlipped) return;
-
-        // if manager is missing
-        if (CardManager.Instance == null)
-        {
-            return;
-        }
-
-        animator.Play("Flip", 0, 0f);
-
-        Invoke(nameof(ShowFrontAndNotifyManager), 0.15f);
-    }
-
-    void ShowFrontAndNotifyManager()
-    {
-        ShowFront();
-        CardManager.Instance.CardRevealed(this);
-    }
-
-    // Called by cardmanager when card is of a non-matching pair
-    public void FlipBack()
-    {
-        if (!isFlipped || isMatched) return;
-
-        // play flip animation again, then show back
-        animator.Play("Flip", 0, 0f);
-        Invoke(nameof(ShowBack), 0.15f);
-    }
-
-    // Called by cardmanager when card is of a matching pair
+    // Called when match happens
     public void SetMatched()
     {
         isMatched = true;
-
-        //disable button so it can't be clicked again
         var btn = GetComponent<Button>();
-        if (btn != null)
-        {
-            btn.interactable = false;
-        }
+        if (btn != null) btn.interactable = false;
     }
 
+    public bool IsMatched() => isMatched;
+
+    // Hide card for matched pairs
     public void RemoveCard()
     {
-        // Disable button so the player can't click it anymore
         var btn = GetComponent<Button>();
-        if (btn != null)
-            btn.interactable = false;
+        if (btn != null) btn.interactable = false;
 
-        // Hide the front and back images
         frontImage.gameObject.SetActive(false);
         backImage.gameObject.SetActive(false);
 
-        // Make card transparent
         var img = GetComponent<Image>();
-        if (img != null)
-            img.enabled = false;
-
+        if (img != null) img.enabled = false;
     }
 }

@@ -39,6 +39,8 @@ public class CardManager : MonoBehaviour
     void Start()
     {
         CreateGrid(4, 4);
+        isTimerRunning = false;
+        StartCoroutine(StartGamePreview());
     }
 
     void Update()
@@ -137,6 +139,41 @@ public class CardManager : MonoBehaviour
 
     }
 
+    IEnumerator StartGamePreview()
+    {
+        // Disable input during preview
+        canClick = false;
+
+        Debug.Log ("First Card");
+        //Flip all cards face-up
+        foreach (Transform child in gridParent)
+        {
+            Card card = child.GetComponent<Card>();
+            if (card != null)
+            {
+                card.ShowFrontInstant();
+            }
+        }
+
+        
+        yield return new WaitForSeconds(2f);
+
+        //Flip all cards face-down
+        foreach (Transform child in gridParent)
+        {
+            Card card = child.GetComponent<Card>();
+            if (card != null && !card.IsMatched())
+            {
+                card.ShowBackInstant(); 
+            }
+        }
+
+        
+        isTimerRunning = true;
+
+        
+        canClick = true;
+    }
 
     void EndGame()
     {

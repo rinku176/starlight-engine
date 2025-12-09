@@ -1561,8 +1561,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000076293945, y: -0.000019073}
-  m_SizeDelta: {x: 637.534, y: 386.2}
+  m_AnchoredPosition: {x: -0.000015259, y: -0.000019073}
+  m_SizeDelta: {x: 1040.982, y: 386.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1065037246
 MonoBehaviour:
@@ -1602,7 +1602,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.034131378, g: 0.1325444, b: 0.5566038, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1980,6 +1980,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b1c6736afd8159848bbd34368e08e7d4, type: 3}
   - {fileID: 21300000, guid: 9965abfb0039e8840aa0c3e149ce7611, type: 3}
   - {fileID: 21300000, guid: 872a682a0d0e6a5438d981bfac420818, type: 3}
+  - {fileID: 21300000, guid: dc59b77b302b21045bcb4c5a11f0acc2, type: 3}
+  - {fileID: 21300000, guid: b18e41146d75fb4498c6ce96126e00eb, type: 3}
+  - {fileID: 21300000, guid: f4ad54fa045900a43a78259996bf343e, type: 3}
+  - {fileID: 21300000, guid: 553b0cefd4697c24987499838241fb22, type: 3}
+  - {fileID: 21300000, guid: 8fc3ff2b3de11c743a74ca43911dae7e, type: 3}
+  - {fileID: 21300000, guid: d9d6e5c8d4189964da0ebd3720a26046, type: 3}
+  - {fileID: 21300000, guid: 19234cdce396d974aad7a223247ddb14, type: 3}
   movesText: {fileID: 341145604}
   scoreText: {fileID: 1505284728}
   timerText: {fileID: 504858443}

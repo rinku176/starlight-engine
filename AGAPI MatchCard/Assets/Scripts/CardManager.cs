@@ -12,6 +12,8 @@ public class CardManager : MonoBehaviour
     public GameObject cardPrefab;
     public Transform gridParent;
 
+    public static string currentDifficulty = "Medium";
+
     public Sprite[] emojiSprites;
 
     public TextMeshProUGUI movesText;
@@ -237,14 +239,46 @@ public class CardManager : MonoBehaviour
         isTimerRunning = false;
         winPanel.SetActive(true);
 
+        SaveHighScore();
+
         string summary = "";
         summary += "YOU WIN!\n\n";
         summary += "Moves: " + moves + "\n";
         summary += "Score: " + score+ "\n";
         summary += "Time: " + Mathf.FloorToInt(timer) + " seconds";
+        string timeKey = currentDifficulty + "_BestTime";
+        string movesKey = currentDifficulty + "_BestMoves";
+
+        float bestTime = PlayerPrefs.GetFloat(timeKey, timer);
+        int bestMoves = PlayerPrefs.GetInt(movesKey, moves);
+
+        summary += "\nBest Time: " + Mathf.FloorToInt(bestTime) + " secs";
+        summary += "\nBest Moves: " + bestMoves;
+
 
         summaryText.text = summary;
     }
+
+    void SaveHighScore()
+    {
+        string timeKey = currentDifficulty + "_BestTime";
+        string movesKey = currentDifficulty + "_BestMoves";
+
+        // BEST TIME (lower is better)
+        if (!PlayerPrefs.HasKey(timeKey) || timer < PlayerPrefs.GetFloat(timeKey))
+        {
+            PlayerPrefs.SetFloat(timeKey, timer);
+        }
+
+        // BEST MOVES (lower is better)
+        if (!PlayerPrefs.HasKey(movesKey) || moves < PlayerPrefs.GetInt(movesKey))
+        {
+            PlayerPrefs.SetInt(movesKey, moves);
+        }
+
+        PlayerPrefs.Save();
+    }
+
 
     public void RestartGame()
     {
